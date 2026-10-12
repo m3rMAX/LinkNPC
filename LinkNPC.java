@@ -1,5 +1,6 @@
 package com.linknpc;
 
+import org.bukkit.command.PluginCommand;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -96,7 +97,7 @@ public final class LinkNPC extends JavaPlugin implements Listener, CommandExecut
     }
 
     private void PluginCommandSetup() {
-        Command command = getCommand("npchero");
+        PluginCommand command = getCommand("npchero");
         if (command == null) {
             getLogger().severe("Command npchero is missing from plugin.yml; disabling plugin.");
             Bukkit.getPluginManager().disablePlugin(this);

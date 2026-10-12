@@ -1,3 +1,4 @@
+
 name: Build LinkNPC
 
 on:
@@ -23,11 +24,19 @@ jobs:
           java-version: '21'
           cache: maven
 
-      - name: Extract source ZIP
+      - name: Prepare source files
         run: |
-          ZIP_FILE=$(find . -maxdepth 1 -type f -iname '*.zip' -print -quit)
+          mkdir -p src/main/java/com/linknpc
+          mkdir -p src/main/resources
+          cp LinkNPC.java src/main/java/com/linknpc/LinkNPC.java
+          cp plugin.yml src/main/resources/plugin.yml
 
-          if [ -z "$ZIP_FILE" ]; then
-            echo "ERROR: No ZIP source file found."
-            exit 1
-          fi
+      - name: Build plugin
+        run: mvn --batch-mode clean package
+
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: LinkNPC-JAR
+          path: target/*.jar
+          if-no-files-found: error

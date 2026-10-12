@@ -1,0 +1,38 @@
+
+name: Build LinkNPC
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Extract source ZIP
+        run: |
+          unzip -o LinkNPC-1.1.0-Custom-Animated-Mascots.zip
+          cd LinkNPC-Maven
+          mvn --batch-mode clean package
+
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: LinkNPC-JAR
+          path: LinkNPC-Maven/target/*.jar
+          if-no-files-found: error
+          
